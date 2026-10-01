@@ -1,0 +1,905 @@
+:root {
+    --bg: #0c0c0b;
+    --fg: #ece9e1;
+    --mut: #8c887d;
+    --line: #26251f;
+    --acc: #4ee2d0; /* diamond */
+    --disc: linear-gradient(160deg, #4ee2d0, #1d5f78);
+    --card: #161616;
+    --panel: rgba(12, 12, 11, .82);
+    --sky: #070818;
+    --glow: rgba(0, 0, 0, .45)
+}
+
+/* Tema siang 06:00–17:59 WIB (diatur oleh <Sky />) */
+[data-theme="day"] {
+    --bg: #f3eee1;
+    --fg: #1b1a16;
+    --mut: #3d3a31;
+    --line: rgba(27, 26, 22, .16);
+    --acc: #2f8a3a; /* rumput */
+    --disc: linear-gradient(160deg, #6cc24f, #2a6b2c);
+    --card: #e8e1cf;
+    --panel: rgba(243, 238, 225, .84);
+    --sky: #78a7ff;
+    --glow: rgba(255, 255, 255, .45)
+}
+
+* {
+    box-sizing: border-box
+}
+
+html {
+    scroll-behavior: smooth
+}
+
+body {
+    margin: 0;
+    background: var(--sky);
+    color: var(--fg);
+    font: 17px/1.6 var(--sans), system-ui, sans-serif;
+    overflow-x: hidden
+}
+
+::selection {
+    background: var(--acc);
+    color: var(--bg)
+}
+
+a {
+    color: inherit;
+    text-decoration: none
+}
+
+em,
+i {
+    font-style: italic
+}
+
+.mono {
+    font-family: var(--mono), monospace;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--mut)
+}
+
+.mask {
+    display: block;
+    overflow: hidden;
+    padding: .08em 0;
+    margin: -.08em 0
+}
+
+.field {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none
+}
+
+.sky {
+    width: 100%;
+    height: 100%
+}
+
+.grain {
+    position: fixed;
+    inset: -50%;
+    z-index: 40;
+    pointer-events: none;
+    opacity: .07;
+    animation: grain 1s steps(6) infinite;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")
+}
+
+@keyframes grain {
+    0% {
+        transform: translate(0, 0)
+    }
+
+    20% {
+        transform: translate(-3%, 2%)
+    }
+
+    40% {
+        transform: translate(2%, -3%)
+    }
+
+    60% {
+        transform: translate(-2%, -1%)
+    }
+
+    80% {
+        transform: translate(3%, 3%)
+    }
+
+    100% {
+        transform: translate(0, 0)
+    }
+}
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--acc);
+    transform-origin: 0 50%;
+    z-index: 70
+}
+
+@media (hover:hover) and (pointer:fine) {
+
+    html,
+    a,
+    button,
+    [data-hover] {
+        cursor: none
+    }
+}
+
+.top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 4vw;
+    mix-blend-mode: difference;
+    color: #fff
+}
+
+.top a {
+    color: #fff;
+    margin-left: 22px
+}
+
+.top a:first-child {
+    margin: 0
+}
+
+.top a:hover {
+    text-decoration: line-through
+}
+
+.clk {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    white-space: nowrap
+}
+
+main,
+.foot {
+    position: relative;
+    z-index: 2
+}
+
+.stmt em {
+    color: var(--acc)
+}
+
+.mq {
+    overflow: hidden;
+    border-block: 1px solid var(--line);
+    padding: 3vh 0;
+    position: relative;
+    z-index: 2;
+    background: var(--panel)
+}
+
+.mq div {
+    display: flex;
+    width: max-content;
+    animation: mq 45s linear infinite
+}
+
+.mq:hover div {
+    animation-play-state: paused
+}
+
+.mq span {
+    font: 400 clamp(48px, 9vw, 120px)/1.1 var(--serif), serif;
+    padding-right: .3em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--fg);
+    white-space: nowrap;
+    transition: .3s
+}
+
+.mq span:hover {
+    color: var(--acc);
+    -webkit-text-stroke-color: var(--acc)
+}
+
+@keyframes mq {
+    to {
+        transform: translateX(-50%)
+    }
+}
+
+.sec {
+    position: relative;
+    z-index: 2;
+    background: var(--panel);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 30px;
+    padding: 14vh 4vw;
+    border-top: 1px solid var(--line)
+}
+
+.lab {
+    padding-top: .6em
+}
+
+.big {
+    font: 400 clamp(28px, 4vw, 54px)/1.12 var(--serif), serif;
+    margin: 0 0 4vh;
+    max-width: 22em
+}
+
+.big em {
+    color: var(--acc)
+}
+
+.sm {
+    color: var(--mut);
+    max-width: 34em;
+    margin: 0 0 4vh
+}
+
+.rows {
+    border-top: 1px solid var(--line)
+}
+
+.row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 60px 1.2fr 1.6fr 140px;
+    gap: 24px;
+    align-items: baseline;
+    padding: 34px 0;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    isolation: isolate;
+    transition: color .4s, padding .4s
+}
+
+.row::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--acc);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform .5s cubic-bezier(.2, .7, .1, 1);
+    z-index: -1
+}
+
+.row:hover {
+    color: var(--bg);
+    padding-left: 18px;
+    padding-right: 18px
+}
+
+.row:hover::before {
+    transform: scaleY(1)
+}
+
+.row:hover .mono,
+.row:hover p {
+    color: var(--bg)
+}
+
+.row h3 {
+    font: 400 clamp(26px, 3.2vw, 42px)/1.05 var(--serif), serif;
+    margin: 0
+}
+
+.row p {
+    margin: 0;
+    color: var(--mut);
+    font-size: 15px;
+    transition: color .4s
+}
+
+.g {
+    text-align: right
+}
+
+.mail {
+    font: 400 clamp(30px, 7.4vw, 112px)/1.05 var(--serif), serif;
+    display: inline-block;
+    border-bottom: 2px solid var(--fg);
+    transition: color .3s, border-color .3s
+}
+
+.mail:hover {
+    color: var(--acc);
+    border-color: var(--acc)
+}
+
+.links {
+    margin-top: 5vh
+}
+
+.links a {
+    margin-right: 26px;
+    color: var(--fg)
+}
+
+.links a:hover {
+    color: var(--acc)
+}
+
+.foot {
+    padding: 30px 4vw 40px;
+    border-top: 1px solid var(--line);
+    background: var(--panel)
+}
+
+@media (max-width:800px) {
+    .sec {
+        grid-template-columns: 1fr;
+        gap: 10px
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+        gap: 6px
+    }
+
+    .g {
+        text-align: left
+    }
+
+    .clk {
+        display: none
+    }
+}
+
+@media (prefers-reduced-motion:reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important
+    }
+}
+
+/* ---- Hero dengan foto ---- */
+.hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 14vh 4vw 8vh;
+    overflow: hidden
+}
+
+.hero-txt {
+    position: relative;
+    z-index: 3;
+    max-width: 50vw;
+    text-shadow: 0 2px 18px var(--glow)
+}
+
+.hero h1 {
+    font: 400 clamp(84px, 13vw, 240px)/.85 var(--serif), serif;
+    letter-spacing: -.03em;
+    margin: 2.5vh 0 4vh
+}
+
+.hero h1 i {
+    color: var(--acc)
+}
+
+.stmt {
+    font: 400 clamp(22px, 2.6vw, 38px)/1.15 var(--serif), serif;
+    max-width: 15em
+}
+
+.portrait {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: min(40vw, 680px);
+    aspect-ratio: 958/855;
+    z-index: 1;
+    pointer-events: none
+}
+
+.disc-wrap {
+    position: absolute;
+    left: 36%;
+    top: 22%;
+    width: 56%;
+    aspect-ratio: 1
+}
+
+.disc {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--disc)
+}
+
+.me-wrap {
+    position: absolute;
+    inset: 0
+}
+
+.me {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    display: block
+}
+
+.deco {
+    position: absolute;
+    z-index: 1;
+    width: 200px;
+    height: 110px;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--acc) 34%, transparent 36%);
+    background-size: 52px 46px;
+    -webkit-mask-image: linear-gradient(90deg, #000 20%, transparent 95%);
+    mask-image: linear-gradient(90deg, #000 20%, transparent 95%)
+}
+
+.deco.tl {
+    left: 3vw;
+    top: 11vh
+}
+
+.deco.bl {
+    left: 3vw;
+    bottom: 9vh
+}
+
+@media (max-width:800px) {
+    .hero {
+        justify-content: flex-start;
+        padding-top: 15vh
+    }
+
+    .hero-txt {
+        max-width: 100%
+    }
+
+    .portrait {
+        width: 100vw
+    }
+
+    .deco {
+        display: none
+    }
+}
+
+/* ---- Kursor crosshair Minecraft ---- */
+.xh {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10002;
+    mix-blend-mode: difference
+}
+
+.xh i {
+    position: absolute;
+    display: block;
+    width: 3px;
+    height: 3px;
+    left: -1.5px;
+    top: -1.5px;
+    background: #fff
+}
+
+.xh .u,
+.xh .d {
+    height: 7px
+}
+
+.xh .l,
+.xh .r {
+    width: 7px
+}
+
+.xh .u {
+    top: -10.5px
+}
+
+.xh .d {
+    top: 3.5px
+}
+
+.xh .l {
+    left: -10.5px
+}
+
+.xh .r {
+    left: 3.5px
+}
+
+.sel {
+    position: fixed;
+    z-index: 10000;
+    pointer-events: none;
+    border: 2px solid var(--acc);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .7), inset 0 0 0 1px rgba(0, 0, 0, .45);
+    transition: left .14s steps(3), top .14s steps(3), width .14s steps(3), height .14s steps(3)
+}
+
+.bit {
+    position: fixed;
+    z-index: 10001;
+    pointer-events: none;
+    image-rendering: pixelated;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35)
+}
+
+@media (hover:none),
+(pointer:coarse) {
+
+    .xh,
+    .sel,
+    .bit {
+        display: none
+    }
+}
+/* ---- Permintaan CV ---- */
+.cv-btn {
+    display: inline-block;
+    margin-top: 5vh;
+    padding: 16px 28px;
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    background: none;
+    color: var(--fg);
+    font: 400 clamp(20px, 2.2vw, 30px)/1 var(--serif), serif;
+    transition: background .3s, color .3s, border-color .3s
+}
+
+.cv-btn:hover {
+    background: var(--acc);
+    border-color: var(--acc);
+    color: var(--bg)
+}
+
+.cv-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, .7);
+    backdrop-filter: blur(4px)
+}
+
+.cv-modal {
+    position: relative;
+    width: min(460px, 100%);
+    max-height: calc(100svh - 32px);
+    overflow-y: auto;
+    padding: 34px 30px 30px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 16px
+}
+
+.cv-modal h3 {
+    font: 400 clamp(28px, 3vw, 40px)/1.05 var(--serif), serif;
+    margin: 0 0 12px
+}
+
+.cv-modal .sm {
+    margin-bottom: 24px
+}
+
+.cv-modal label {
+    display: block;
+    margin-bottom: 16px
+}
+
+.cv-modal input,
+.cv-modal textarea {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--fg);
+    font: 16px/1.4 var(--sans), system-ui, sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+    outline: none;
+    resize: vertical;
+    transition: border-color .3s
+}
+
+.cv-modal input:focus,
+.cv-modal textarea:focus {
+    border-color: var(--acc)
+}
+
+.cv-x {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: 0;
+    font-size: 16px
+}
+
+.cv-x:hover {
+    color: var(--acc)
+}
+
+.cv-send {
+    margin-top: 8px;
+    padding: 14px 22px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--acc);
+    color: var(--bg)
+}
+
+/* Tombol kirim: truk pengantar (tampak atas). Jalan bergulir, truk masuk,
+   paket jatuh ke bak, lalu truk melaju keluar saat terkirim. */
+.truck-btn {
+    position: relative;
+    overflow: hidden;
+    width: 240px;
+    height: 54px;
+    padding: 0;
+    transition: transform .2s
+}
+
+.truck-btn:active {
+    transform: scale(.96)
+}
+
+.truck-btn .lbl,
+.truck-btn .done {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .3s, transform .3s
+}
+
+.truck-btn .done {
+    opacity: 0;
+    transform: translateY(18px)
+}
+
+.truck-btn.sending .lbl,
+.truck-btn.leaving .lbl {
+    opacity: 0;
+    transform: translateY(-18px)
+}
+
+.truck-btn.leaving .done {
+    opacity: 1;
+    transform: none;
+    transition-delay: .55s
+}
+
+.road {
+    position: absolute;
+    inset: 0;
+    background: #2a2c34;
+    opacity: 0;
+    transition: opacity .3s
+}
+
+.road::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    margin-top: -1.5px;
+    background: repeating-linear-gradient(90deg, #f4f1e8 0 14px, transparent 14px 28px);
+    animation: lane .45s linear infinite
+}
+
+@keyframes lane {
+    to {
+        background-position: -28px 0
+    }
+}
+
+.sending .road {
+    opacity: 1
+}
+
+.leaving .road {
+    opacity: 0;
+    transition-delay: .45s
+}
+
+.truck {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    width: 66px;
+    height: 30px;
+    margin: -15px 0 0 -33px;
+    transform: translateX(-200px)
+}
+
+.sending .truck {
+    animation: truck-in .7s cubic-bezier(.2, .8, .3, 1) forwards
+}
+
+.leaving .truck {
+    animation: truck-out .55s cubic-bezier(.6, 0, .9, .4) forwards
+}
+
+@keyframes truck-in {
+    from {
+        transform: translateX(-200px)
+    }
+
+    80% {
+        transform: translateX(4px)
+    }
+
+    to {
+        transform: translateX(0)
+    }
+}
+
+@keyframes truck-out {
+    from {
+        transform: translateX(0)
+    }
+
+    to {
+        transform: translateX(220px)
+    }
+}
+
+.truck .bed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 46px;
+    height: 30px;
+    border: 3px solid #d9d6cc;
+    border-radius: 3px;
+    background: #4a4d57
+}
+
+.truck .cab {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    width: 18px;
+    height: 26px;
+    border-radius: 3px 7px 7px 3px;
+    background: var(--acc)
+}
+
+.truck .cab::after {
+    content: "";
+    position: absolute;
+    right: 3px;
+    top: 4px;
+    width: 5px;
+    height: 18px;
+    border-radius: 2px;
+    background: #bfe9ff
+}
+
+.truck .pkg {
+    position: absolute;
+    left: 11px;
+    top: 6px;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent 7px, #e9cf9a 7px 11px, transparent 11px), #c08a4a;
+    opacity: 0
+}
+
+.sending .pkg,
+.leaving .pkg {
+    animation: pkg-drop .5s .75s cubic-bezier(.3, 1.4, .5, 1) forwards
+}
+
+@keyframes pkg-drop {
+    from {
+        opacity: 0;
+        transform: scale(2.6) rotate(-25deg)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+/* ---- Tombol chatbot: kepala creeper ---- */
+.creeper {
+    position: relative;
+    display: block;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .35), inset 0 0 0 2px rgba(0, 0, 0, .25);
+    transition: transform .2s
+}
+
+.creeper svg {
+    display: block;
+    width: 100%;
+    height: 100%
+}
+
+.creeper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none
+}
+
+/* hover = sumbu menyala: membengkak & berkedip putih seperti creeper mau meledak */
+.creeper:hover {
+    animation: fuse .5s steps(2) infinite
+}
+
+.creeper:hover::after {
+    animation: flash .5s steps(2) infinite
+}
+
+@keyframes fuse {
+    50% {
+        transform: scale(1.1)
+    }
+}
+
+@keyframes flash {
+    50% {
+        opacity: .45
+    }
+}
+
+.cv-err {
+    color: var(--acc);
+    font-size: 14px
+}
+
+.cv-hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0
+}

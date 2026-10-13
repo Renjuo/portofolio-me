@@ -39,7 +39,6 @@ export default function Home() {
 
       <main>
         <section className="hero" id="top">
-          <span className="deco tl" /><span className="deco bl" />
           <div className="hero-txt">
             <Fade><p className="mono">Based in Indonesia</p></Fade>
             <h1><Line>Rafli<i>.</i></Line></h1>

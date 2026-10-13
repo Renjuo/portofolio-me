@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useScroll, useTransform, useInView } from "framer-motion";
-import { makeClock, isDay } from "../lib/sky";
+import { makeClock, isDay, TERRAIN, heights, world } from "../lib/sky";
 
 /* Langit Minecraft bergaya shader pack (WebGL) yang mengikuti jam WIB:
    cahaya matahari & bloom, god rays, awan volumetrik, 3 lapis bukit blok berkabut,
@@ -30,6 +30,7 @@ precision highp float;
 uniform vec2 uRes, uSun, uMoon;
 uniform float uTime, uAspect, uNight, uDusk, uSunUp, uMoonUp, uMist, uPar;
 uniform vec3 uTop, uBot, uSunCol;
+uniform sampler2D uH; // tinggi kolom lapis depan (lib/sky)
 
 // lapisan bukit: ukuran blok, dasar, seed, amplitudo
 const vec4 LF = vec4(.014, .17, 11., 2.2);
@@ -47,6 +48,7 @@ float fbm(vec2 p) { float v = 0., a = .5; for (int i = 0; i < 5; i++) { v += a *
 float fbm3(vec2 p) { float v = 0., a = .5; for (int i = 0; i < 3; i++) { v += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; } return v; }
 
 float blocks(float c, vec4 L, float maxB) {
+  if (L.z > 36.5) return floor(texture2D(uH, vec2((c + .5) / 256., .5)).r * 255. + .5);
   float n = sin(c * .23 + L.z) * 1.6 + sin(c * .57 + L.z * 2.1) * 1.1 + sin(c * 1.31 + L.z * 3.7) * .6 + (h1(c + L.z * 13.) - .5) * 1.2;
   return floor(clamp(3.4 + n * L.w, 1., maxB));
 }
@@ -232,6 +234,10 @@ function compile(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, TERRAIN.cols, 1, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, heights);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.uniform1i(gl.getUniformLocation(pr, "uH"), 0);
   const u = {};
   for (const k of ["uRes", "uSun", "uMoon", "uTime", "uAspect", "uNight", "uDusk", "uSunUp", "uMoonUp", "uMist", "uPar", "uTop", "uBot", "uSunCol"]) u[k] = gl.getUniformLocation(pr, k);
   return u;
@@ -251,7 +257,7 @@ export function Sky() {
       const s = innerWidth > 1400 ? 0.6 : 0.8; // render lebih kecil lalu di-upscale, hemat GPU
       cv.width = Math.round(innerWidth * s); cv.height = Math.round(innerHeight * s);
       aspect = innerWidth / innerHeight;
-      if (u) gl.viewport(0, 0, cv.width, cv.height);
+      if (u) { gl.viewport(0, 0, cv.width, cv.height); world.sx = cv.clientWidth / aspect; world.sy = cv.clientHeight; }
     };
     const mv = (e) => { target = (e.clientX / innerWidth) * 2 - 1; };
     // posisi di lintasan busur; p: 0 = terbit (kiri), 1 = terbenam (kanan)
@@ -265,6 +271,7 @@ export function Sky() {
       if (mode !== theme) { theme = mode; document.documentElement.dataset.theme = mode; }
       if (!u) return;
       if (!calm) par += (target - par) * 0.05;
+      world.par = par;
       const sp = (h - 6) / 12, mp = ((h - 18 + 24) % 24) / 12, night = nightAt(h);
       const [top, bot] = skyAt(h);
       gl.uniform2f(u.uRes, cv.width, cv.height);

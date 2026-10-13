@@ -462,6 +462,67 @@ main,
     }
 }
 
+/* ---- Makhluk Minecraft yang berjalan di latar ---- */
+.mobs {
+    z-index: 1;
+    overflow: hidden;
+    --u: 5px;
+    filter: brightness(.6)
+}
+
+[data-theme="day"] .mobs {
+    filter: none
+}
+
+.mob {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    will-change: transform
+}
+
+.mob svg {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    display: block;
+    transform: translateX(-50%)
+}
+
+.mob .side.flip {
+    transform: translateX(-50%) scaleX(-1)
+}
+
+.mob .la,
+.mob .lb {
+    animation: legs .5s steps(1) infinite
+}
+
+.mob .lb {
+    animation-delay: -.25s
+}
+
+@keyframes legs {
+    50% {
+        visibility: hidden
+    }
+}
+
+.mob .front,
+.mob.look .side {
+    display: none
+}
+
+.mob.look .front {
+    display: block
+}
+
+@media (max-width:800px) {
+    .mobs {
+        --u: 3px
+    }
+}
+
 /* ---- Kursor crosshair Minecraft ---- */
 .xh {
     position: fixed;

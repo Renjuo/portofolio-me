@@ -1,6 +1,7 @@
 "use client";
 import { Sky, Cursor, Progress, Clock, Scramble, Magnetic, Line, Fade, Portrait } from "../components/fx";
 import CvRequest from "../components/CvRequest";
+import Mobs from "../components/Mobs";
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -29,7 +30,7 @@ const Row = ({ r }) => (
 export default function Home() {
   return (
     <>
-      <Progress /><Sky /><Cursor /><div className="grain" />
+      <Progress /><Sky /><Mobs /><Cursor /><div className="grain" />
 
       <header className="top mono">
         <a href="#top">Rafli</a>

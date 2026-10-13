@@ -236,7 +236,7 @@ export const knowledge = [
     pertanyaan: ["cara menghubungi rafli", "email rafli", "kontak rafli", "how to contact", "hubungi", "linkedin rafli", "instagram rafli"],
     kata_kunci: ["kontak", "contact", "email", "hubungi", "linkedin", "instagram", "ig", "github", "sosmed", "media sosial", "surel"],
     jawaban:
-      "Kamu bisa menghubungi Rafli lewat:\n- Email: yahyarafli.hidayah04@gmail.com\n- LinkedIn: yahyahidayah77\n- Instagram: ren.juo_",
+      "Kamu bisa menghubungi Rafli lewat:\n- Email: yahyarafli.hidayah04@gmail.com\n- LinkedIn: yahyahidayah77\n- Github: https://github.com/Renjuo ",
   },
   {
     topik: "Lokasi",
